@@ -1,0 +1,63 @@
+
+<div class="card mx-4 my-4">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item mr-2">
+                <input 
+                   *ngIf="!conected"
+                   [(ngModel)]="messageModel.username"
+                   name="isername"
+                   type="text" 
+                   class="form-control" 
+                   placeholder="Escribe tu nombre de usuario"
+                >
+            </li>
+            <li class="nav-item mr-2">
+                <button
+                    *ngIf="!conected"
+                    class="btn btn-success" 
+                    (click)="connect()"
+                >Conectar</button>
+            </li>
+            <li class="nav-item">
+                <button 
+                    *ngIf="conected"
+                    class="btn btn-danger" 
+                    (click)="desconnect()"
+                >Desonectar</button>
+            </li>
+        </ul>
+    </div>
+    <div #scrollChat [scrollTop] = "scrollChat.scrollHeight" class="card-body card-scroll" *ngIf="conected">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light" *ngFor="let message of messages">
+                <span *ngIf="messageModel.type === 'MESSAGE'">
+                    {{messageModel.date | date:'shortTime'}} {{messageModel.username}} dice: <br> 
+                    <span [ngStyle]="{'color': messageModel.color}"> {{messageModel.meseage}}</span>
+                </span>
+                <span *ngIf="messageModel.type === 'NEW_USER'">
+                    nuevo usuario {{messageModel.date | date:'shortTime'}} @ 
+                    <span [ngStyle]="{'color': messageModel.color}">{{messageModel.username}}</span>
+                </span>
+            </li>
+        </ul>
+       
+    </div>
+
+    <div class="card-footer" *ngIf="conected">
+        <form class="form-inline">
+            <div class="form-group mx-3">
+                <input 
+                    [(ngModel)]="messageModel.text"
+                    name="message"
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Escribe un mensaje"
+                    (keyup)="writing()"
+                >
+            </div>
+            <button class="btn btn-primary" type="submit" (click)="sendMessage()">Enviar</button>
+        </form>
+        <div>{{write}}</div>
+    </div>
+</div>
